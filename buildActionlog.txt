@@ -1,0 +1,105 @@
+Set up compute
+15 seconds
+
+Download source
+32 seconds
+
+Showing the last 4 lines.
+1[Container] 2024/12/06 19:11:25.202542 Processing environment variables
+2[Container] 2024/12/06 19:11:25.337917 Moving to directory /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo
+3[Container] 2024/12/06 19:11:25.338125 Symbolic link created from /sources/WorkflowSource to /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo.
+4[Container] 2024/12/06 19:11:25.338145 Symbolic link created from /artifacts/DeployToAWSAmplifyHosting_50/newOutput to /codecatalyst/output/src3644/src/s3/02.
+
+Restore cache
+< 1 second
+No results
+No results to display.
+
+DeployToAWSAmplifyHosting_50
+1 second
+
+Showing the last 22 lines.
+1[Container] 2024/12/06 19:11:26.041992 Running command node /codecatalyst/output/src3644/src/s3/03/cloned-repo-6534810218607848617/dist/index.js
+2Current CodeCatalyst space CPKC_POC
+3Current CodeCatalyst project cpkc-nextjs-phase1
+4Action input
+5============
+6App Stack Name = cpkc-app
+7Amplify App Id = null
+8Amplify Branch Name = main
+9Path = .next
+10Wait = true
+11Create Branch = true
+12Region = us-east-2
+13Stack already exists.
+14Checking if the branch exists
+15The branch already exists
+16Zipping the folder ".next" for upload
+17Action Failed, reason: Error: File not found: .next
+18::set-output name=ACTION_RUN_SUMMARY::[{text:CUSTOM,message:"Error: File not found: .next",level:Error}]
+19Action Failed, reason: Error: File not found: .next
+20
+21[Container] 2024/12/06 19:11:28.028025 Command failed with exit status 1
+22[Container] 2024/12/06 19:11:28.028055 Failed to run action due to exit status 1
+
+Save cache
+< 1 second
+No results
+No results to display.
+
+Upload artifacts
+< 1 second
+Panel width
+-
+Deploy Action logs
+
+Set up compute
+15 seconds
+
+Download source
+32 seconds
+
+Showing the last 4 lines.
+1[Container] 2024/12/06 19:11:25.202542 Processing environment variables
+2[Container] 2024/12/06 19:11:25.337917 Moving to directory /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo
+3[Container] 2024/12/06 19:11:25.338125 Symbolic link created from /sources/WorkflowSource to /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo.
+4[Container] 2024/12/06 19:11:25.338145 Symbolic link created from /artifacts/DeployToAWSAmplifyHosting_50/newOutput to /codecatalyst/output/src3644/src/s3/02.
+
+Restore cache
+< 1 second
+No results
+No results to display.
+
+DeployToAWSAmplifyHosting_50
+1 second
+
+Showing the last 22 lines.
+1[Container] 2024/12/06 19:11:26.041992 Running command node /codecatalyst/output/src3644/src/s3/03/cloned-repo-6534810218607848617/dist/index.js
+2Current CodeCatalyst space CPKC_POC
+3Current CodeCatalyst project cpkc-nextjs-phase1
+4Action input
+5============
+6App Stack Name = cpkc-app
+7Amplify App Id = null
+8Amplify Branch Name = main
+9Path = .next
+10Wait = true
+11Create Branch = true
+12Region = us-east-2
+13Stack already exists.
+14Checking if the branch exists
+15The branch already exists
+16Zipping the folder ".next" for upload
+17Action Failed, reason: Error: File not found: .next
+18::set-output name=ACTION_RUN_SUMMARY::[{text:CUSTOM,message:"Error: File not found: .next",level:Error}]
+19Action Failed, reason: Error: File not found: .next
+20
+21[Container] 2024/12/06 19:11:28.028025 Command failed with exit status 1
+22[Container] 2024/12/06 19:11:28.028055 Failed to run action due to exit status 1
+
+Save cache
+< 1 second
+No results
+No results to display.
+
+Upload artifacts
