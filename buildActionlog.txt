@@ -4,7 +4,7 @@ Set up compute
 Download source
 32 seconds
 
-Showing the last 4 lines.
+Showing the last 4 lines.   jjjjj
 1[Container] 2024/12/06 19:11:25.202542 Processing environment variables
 2[Container] 2024/12/06 19:11:25.337917 Moving to directory /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo
 3[Container] 2024/12/06 19:11:25.338125 Symbolic link created from /sources/WorkflowSource to /codecatalyst/output/src3644/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo.
