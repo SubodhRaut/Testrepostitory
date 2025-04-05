@@ -1,0 +1,111 @@
+version: 0.2
+
+env:
+  variables:
+    BITBUCKET_REPO_OWNER: ${BITBUCKET_REPO_OWNER}
+    BITBUCKET_REPO_SLUG: ${BITBUCKET_REPO_SLUG}
+    BITBUCKET_BRANCH: ${BITBUCKET_BRANCH}
+    BITBUCKET_REPO_FULL_NAME: ${BITBUCKET_REPO_FULL_NAME}
+    BITBUCKET_BUILD_NUMBER: ${BITBUCKET_BUILD_NUMBER}
+    BITBUCKET_COMMIT: ${BITBUCKET_COMMIT}
+    SPLIT_API_KEY_RELEASE: ${SPLIT_API_KEY_RELEASE}
+    CONFIG_SECRET: ${CONFIG_SECRET}
+    REPOSITORY_ACCESS_TOKEN: ${REPOSITORY_ACCESS_TOKEN}
+    BITBUCKET_ACCESS_TOKEN: ${BITBUCKET_ACCESS_TOKEN}
+    BITBUCKET_APP_USER: ${BITBUCKET_APP_USER}
+    AppCenterQAToken: ${AppCenterQAToken}
+    AppCenterRegressionToken: ${AppCenterRegressionToken}
+    appcenter_store: ${appcenter_store}
+    bump_version: ${bump_version}
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - pip install selenium pyautogui psutil Appium-Python-Client
+      - if ! command -v jq &> /dev/null; then echo "Installing jq..."; brew install jq; fi
+
+  pre_build:
+    commands:
+      - echo "Preparing build environment..."
+      - ls ~/Library/Keychains/
+      - rm "$HOME/Library/Keychains/build.keychain-db" || true
+
+      - echo '================================================='
+      - echo "Creating keychain..."
+      - security create-keychain -p "$CERT_PASSWORD" "$HOME/Library/Keychains/build.keychain-db"
+      - security default-keychain -s "$HOME/Library/Keychains/build.keychain-db"
+      - security list-keychains -s "$HOME/Library/Keychains/build.keychain-db" /Library/Keychains/System.keychain
+      - echo "Unlocking keychain..."
+      - security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$HOME/Library/Keychains/build.keychain-db"
+      - echo "Setting build.keychain as default..."
+      - security show-keychain-info "$HOME/Library/Keychains/build.keychain-db"
+      - echo '==================================================================='
+      
+      - echo "Retrieving signing certificate from AWS Secrets Manager..."
+      # Retrieve the binary secret (base64-encoded) for the certificate
+      - CERT_BIN=$(aws secretsmanager get-secret-value --secret-id "mac-ctk-app-cet-headless" --query SecretBinary --output text --region us-west-2)
+      - echo $CERT_BIN | base64 --decode > /tmp/certificate.p12
+      - echo "Retrieving Mac Development certificate from AWS Secrets Manager..."
+      - DEV_CERT_BIN=$(aws secretsmanager get-secret-value --secret-id "mac-ctk-app-cert-devsecops-hadless" --query SecretBinary --output text --region us-west-2)
+      - echo $DEV_CERT_BIN | base64 --decode > /tmp/dev_certificate.p12
+
+      - echo "Retrieving certificate password from AWS Secrets Manager..."
+      - CERT_PASSWORD=$(aws secretsmanager get-secret-value --secret-id "sandbox/MAC-CTK-CERT-PWD" --query SecretString --output text --region us-west-2 | jq -r '."MAC-CTK-CERT-PWD"')
+      - echo $CERT_PASSWORD
+      - export $CERT_PASSWORD
+      - export KEYCHAIN_PASSWORD=$CERT_PASSWORD
+      
+      #- echo 'Verify CERTS -------------------------------------'
+      #- openssl pkcs12 -info -in /tmp/certificate.p12 -passin pass:$CERT_PASSWORD -nodes
+      #- openssl pkcs12 -info -in /tmp/dev_certificate.p12 -passin pass:$CERT_PASSWORD -nodes
+      #- echo '------------------------------------------------------'
+
+      - echo "Importing Developer ID certificate..."
+      - security import '/tmp/certificate.p12' -k '/Users/cbuser/Library/Keychains/build.keychain-db' -P "$CERT_PASSWORD" -f pkcs12 --A -T /usr/bin/security -T /usr/bin/codesign
+      - sleep 10
+      - echo "Importing Mac Development certificate..."
+      - security import '/tmp/dev_certificate.p12' -k "$HOME/Library/Keychains/build.keychain-db" -P "$CERT_PASSWORD" -f pkcs12 -A -T /usr/bin/security -T /usr/bin/codesign 
+      - sleep 10
+      - security list-keychains -s "$HOME/Library/Keychains/build.keychain-db"
+      - echo "Setting key partition list to allow codesign access..."
+      - security set-key-partition-list -S "apple-tool:,apple:" -s -k "$KEYCHAIN_PASSWORD" "$HOME/Library/Keychains/build.keychain-db"
+      - echo "Confirming identities..."
+      - security find-identity -p codesigning "$HOME/Library/Keychains/build.keychain-db"
+      
+      - echo "Retrieving installer provisioning profile from AWS Secrets Manager..."
+      - PROFILE_BIN1=$(aws secretsmanager get-secret-value --secret-id "mac-ctk-token-profile" --query SecretBinary --output text --region us-west-2)
+      - echo $PROFILE_BIN1 | base64 --decode > installer.mobileprovision
+      - mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+      - cp installer.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/"
+      - echo "Installed provisioning profiles:"
+      - ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/"
+      
+      - echo "Extracting provisioning profile UUID..."
+      - UUID=$(security cms -D -i "$HOME/Library/MobileDevice/Provisioning Profiles/installer.mobileprovision" | plutil -convert xml1 -o - - | xmllint --xpath 'string(//key[text()="UUID"]/following-sibling::string[1])' -)
+      - echo "UUID extracted- $UUID"
+      - mv "$HOME/Library/MobileDevice/Provisioning Profiles/installer.mobileprovision" "$HOME/Library/MobileDevice/Provisioning Profiles/${UUID}.provisionprofile"
+      - echo "Renamed provisioning profile:"
+      - ls -la "$HOME/Library/MobileDevice/Provisioning Profiles/"
+    
+  build:
+    commands:
+      - echo "Running Xcode tests with provisioning updates enabled..."
+      - xcodebuild test -project LoginHost/LoginHost.xcodeproj -scheme "TruU Authenticator" -allowProvisioningUpdates
+      - echo "Bumping version and building..."
+      - sh ci/bump-version.sh $bump_version
+      - ./build.sh
+      - sh ci/deploy.sh
+      - echo "Cloning and running Desktop Authenticators UI Automation..."
+      - git clone https://bitbucket.org/your_workspace/desktop-authenticators-ui-automation.git
+      - cd desktop-authenticators-ui-automation
+      - python3 test_runner.py test_cycles/test_cycle.json installer.pkg
+
+  post_build:
+    commands:
+      - echo "Build process completed."
+
+artifacts:
+  files:
+    - '**/*'
+
