@@ -1,0 +1,144 @@
+
+Set up compute
+1 minute 55 seconds
+
+Download source
+27 seconds
+
+Showing the last 2 lines.
+1[Container] 2024/12/06 19:08:44.928142 Processing environment variables
+2[Container] 2024/12/06 19:08:45.079385 Moving to directory /codecatalyst/output/src2184/src/git.us-west-2.codecatalyst.aws/v1/CPKC_POC/cpkc-nextjs-phase1/cpkc-phase1-repo
+
+Restore cache
+< 1 second
+No results
+No results to display.
+
+echo "Running npm install"
+< 1 second
+
+Showing the last 3 lines.
+1[Container] 2024/12/06 19:08:45.640373 Running command echo "Running npm install"
+2Running npm install
+3
+
+npm install
+40 seconds
+
+Showing the last 20 lines.
+1[Container] 2024/12/06 19:08:45.650481 Running command npm install
+2npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+3npm WARN deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+4npm WARN deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+5npm WARN deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+6npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+7npm WARN deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+8
+9added 374 packages, and audited 375 packages in 26s
+10
+11140 packages are looking for funding
+12run `npm fund` for details
+13
+14found 0 vulnerabilities
+15npm notice
+16npm notice New minor version of npm available! 10.2.3 -> 10.9.2
+17npm notice Changelog: <https://github.com/npm/cli/releases/tag/v10.9.2>
+18npm notice Run `npm install -g npm@10.9.2` to update!
+19npm notice
+20
+
+echo "Running npm run build"
+< 1 second
+
+Showing the last 3 lines.
+1[Container] 2024/12/06 19:09:25.990877 Running command echo "Running npm run build"
+2Running npm run build
+3
+
+npm run build
+45 seconds
+
+Showing the last 36 lines.
+1[Container] 2024/12/06 19:09:26.003366 Running command npm run build
+2
+3> cpkc-phase1-repo@0.1.0 build
+4> next build
+5
+6Attention: Next.js now collects completely anonymous telemetry regarding usage.
+7This information is used to shape Next.js' roadmap and prioritize features.
+8You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+9https://nextjs.org/telemetry
+10
+11▲ Next.js 15.0.4
+12
+13Creating an optimized production build ...
+14✓ Compiled successfully
+15Linting and checking validity of types ...
+16Collecting page data ...
+17Generating static pages (0/5) ...
+18Generating static pages (1/5)
+19Generating static pages (2/5)
+20Generating static pages (3/5)
+21✓ Generating static pages (5/5)
+22Finalizing page optimization ...
+23Collecting build traces ...
+24
+25Route (app)                              Size     First Load JS
+26┌ ○ /                                    5.46 kB         105 kB
+27└ ○ /_not-found                          896 B           101 kB
+28+ First Load JS shared by all            99.9 kB
+29├ chunks/4bd1b696-80bcaf75e1b4285e.js  52.5 kB
+30├ chunks/517-0ec0e5f25493795c.js       45.5 kB
+31└ other shared chunks (total)          1.88 kB
+32
+33
+34○  (Static)  prerendered as static content
+35
+36
+
+echo "Checking if .next folder was created"
+< 1 second
+
+Showing the last 3 lines.
+1[Container] 2024/12/06 19:10:11.392308 Running command echo "Checking if .next folder was created"
+2Checking if .next folder was created
+3
+
+ls -alh .next
+< 1 second
+
+Showing the last 24 lines.
+1[Container] 2024/12/06 19:10:11.406923 Running command ls -alh .next
+2total 360K
+3drwxr-xr-x 7 root root 4.0K Dec  6 19:10 .
+4drwxr-xr-x 8 root root  315 Dec  6 19:09 ..
+5-rw-r--r-- 1 root root   21 Dec  6 19:09 BUILD_ID
+6-rw-r--r-- 1 root root  958 Dec  6 19:09 app-build-manifest.json
+7-rw-r--r-- 1 root root   82 Dec  6 19:09 app-path-routes-manifest.json
+8-rw-r--r-- 1 root root  995 Dec  6 19:09 build-manifest.json
+9drwxr-xr-x 5 root root   85 Dec  6 19:09 cache
+10drwxr-xr-x 2 root root   58 Dec  6 19:09 diagnostics
+11-rw-r--r-- 1 root root   94 Dec  6 19:10 export-marker.json
+12-rw-r--r-- 1 root root  515 Dec  6 19:10 images-manifest.json
+13-rw-r--r-- 1 root root 7.5K Dec  6 19:10 next-minimal-server.js.nft.json
+14-rw-r--r-- 1 root root  46K Dec  6 19:10 next-server.js.nft.json
+15-rw-r--r-- 1 root root   20 Dec  6 19:09 package.json
+16-rw-r--r-- 1 root root 1.3K Dec  6 19:09 prerender-manifest.json
+17-rw-r--r-- 1 root root    2 Dec  6 19:09 react-loadable-manifest.json
+18-rw-r--r-- 1 root root 5.8K Dec  6 19:09 required-server-files.json
+19-rw-r--r-- 1 root root  861 Dec  6 19:09 routes-manifest.json
+20drwxr-xr-x 5 root root 4.0K Dec  6 19:09 server
+21drwxr-xr-x 6 root root   73 Dec  6 19:09 static
+22-rw-r--r-- 1 root root 248K Dec  6 19:10 trace
+23drwxr-xr-x 3 root root   60 Dec  6 19:09 types
+24
+
+Save cache
+< 1 second
+No results
+No results to display.
+
+Upload artifacts
+1 second
+
+Generate reports
